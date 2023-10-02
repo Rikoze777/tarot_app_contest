@@ -23,7 +23,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from tarot.models import User, Card, Prediction, Subscription
-from tarot.user_utils import (
+from backend.tarot.services.user_utils import (
     is_new_user,
     save_user_data,
     get_user_sub,
