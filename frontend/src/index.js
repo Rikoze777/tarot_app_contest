@@ -5,16 +5,16 @@ import reportWebVitals from './reportWebVitals';
 import { SDKProvider } from '@twa.js/sdk-react';
 import { RouterProvider } from "react-router-dom";
 import { router } from './router';
-import WebAppLoader from './component/WebAppLoader';
+import WebAppLoader from './components/WebAppLoader';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <SDKProvider>
-      <WebAppLoader>
+      {/* <WebAppLoader> */}
         <RouterProvider router={router} />
-      </WebAppLoader>
+      {/* </WebAppLoader> */}
     </SDKProvider>
   </React.StrictMode>
 );

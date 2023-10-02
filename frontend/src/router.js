@@ -3,7 +3,7 @@ import {
     createRoutesFromElements,
     Route,
   } from "react-router-dom";
-  import App from './screen/app/App';
+  import App from './views/app/App';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
