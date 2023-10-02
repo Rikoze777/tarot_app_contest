@@ -23,10 +23,10 @@ from django.conf import settings
 from django.utils import timezone
 
 from tarot.models import User, Card, Prediction, Subscription
-from tarot.bot_utils import (
+from tarot.user_utils import (
     is_new_user,
     save_user_data,
-    get_user_role,
+    get_user_sub,
     delete_user
 )
 
@@ -40,8 +40,6 @@ class States(Enum):
     choose_role = auto()
     user = auto()
     level1 = auto()
-    level2 = auto()
-    level3 = auto()
 
 
 class Transitions(Enum):
@@ -49,9 +47,6 @@ class Transitions(Enum):
     authorization_approve = auto()
     user = auto()
     level1 = auto()
-    level2 = auto()
-    level3 = auto()
-    events = auto()
     speaker_events = auto()
     create_event = auto()
     event = auto()
@@ -83,15 +78,15 @@ class Command(BaseCommand):
                         MessageHandler(Filters.text, save_user),
                         MessageHandler(Filters.contact, save_user),
                     ],
-                States.choose_role:
-                    [
-                        CallbackQueryHandler(handle_role),
-                    ],
-                States.user:
-                    [
-                        CallbackQueryHandler(show_events, pattern=f'^{Transitions.events}$'),
-                        # CallbackQueryHandler(choose_event, pattern=f'^{Transitions.event}$'),
-                    ],
+                # States.choose_role:
+                #     [
+                #         CallbackQueryHandler(handle_role),
+                #     ],
+                # States.user:
+                #     [
+                #         CallbackQueryHandler(show_events, pattern=f'^{Transitions.events}$'),
+                #         # CallbackQueryHandler(choose_event, pattern=f'^{Transitions.event}$'),
+                #     ],
             },
             fallbacks=[
                 CommandHandler('cancel', cancel),
@@ -245,14 +240,12 @@ def save_user(update: Update, context: CallbackContext) -> int:
 ###############################  USER #################################################################
 def show_events(update: Update, context: CallbackContext) -> int:
     chat_id = update.effective_chat.id
-    user_role = get_user_role(chat_id)
+    user_role = get_user_sub(chat_id)
     query = update.callback_query
     query.answer()
     data = query.data
-    events = Event.objects.get_current()
-    print(events)
     keyboard = []
-    if events:
+    if user_role=='U':
         for event in events:
             keyboard.append([InlineKeyboardButton(f'{event.name}', callback_data=str(Transitions.events))])
     else:

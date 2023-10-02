@@ -18,5 +18,5 @@ def delete_user(user_id):
     User.objects.filter(tg_id__contains=user_id).delete()
 
 
-def get_user_role(user_id):
+def get_user_sub(user_id):
     return Subscription.objects.get(user__tg_id=user_id).role

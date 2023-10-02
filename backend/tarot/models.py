@@ -61,8 +61,6 @@ class Subscription(models.Model):
     class UserRole(models.TextChoices):
         USER = "U", "User"
         LEVEL1 = "L1", "Magic user"
-        LEVEL2 = "L2", "Fairy user"
-        LEVEL3 = "L3", "Almighty user"
 
     role = models.CharField(
         'Subscription level',
