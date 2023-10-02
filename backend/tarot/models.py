@@ -24,7 +24,6 @@ class Card(models.Model):
     love = models.TextField('love description')
     day = models.TextField('day description')
     advise = models.TextField('advise description')
-    triple = models.TextField('triple description')
     yes_or_no = models.TextField('yes or no description')
 
     class Meta:
