@@ -1,4 +1,5 @@
 import { ChevronRightIcon } from '@heroicons/react/24/solid'
+import { useNavigate } from 'react-router-dom'
 
 function getStateByType(type) {
   let image, title, description
@@ -41,8 +42,13 @@ function getStateByType(type) {
 function MainMenuItem(props) {
   let state = getStateByType(props.type)
   let imageUrl = process.env.PUBLIC_URL + '/img/' + state.image
+  let navigate = useNavigate(); 
+  const routeChange = () =>{ 
+    let path = `/poll`; 
+    navigate(path);
+  }
   return (
-    <div className="flex flex-row justify-items-center items-center p-4 rounded-3xl gap-8 active:bg-sky-100">
+    <div className="flex bg-white mt-8 flex-row justify-items-center items-center p-4 rounded-3xl gap-8 active:bg-indigo-50" onClick={routeChange}>
       <img className="h-12 w-12 flex-none" src={imageUrl}/>
       <div className="flex-auto">
         <p className='font-sans text-2xl font-bold'>{state.title}</p>
