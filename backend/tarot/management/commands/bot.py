@@ -121,7 +121,7 @@ def start(update: Update, context: CallbackContext) -> int:
         )
         return States.authorization
     else:
-        role = get_user_role(user_id)
+        role = get_user_sub(user_id)
         context.bot.send_message(
             chat_id=user_id,
             text=f"We are glad to see you again. Your subscription level is {role}"
@@ -150,7 +150,7 @@ def callback_approve_handler(update: Update, context: CallbackContext) -> int:
 
 def handle_role(update: Update, context: CallbackContext) -> int:
     chat_id = update.effective_chat.id
-    user_role = get_user_role(chat_id)
+    user_role = get_user_sub(chat_id)
     query = update.callback_query
     query.answer()
     data = query.data

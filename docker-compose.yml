@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  web:
+    container_name: tarot_web
+    build:
+      context: backend
+    command: python -m gunicorn -b 0.0.0.0:8080 --reload zodiac.wsgi:application
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - .:/tarot
+  
+  frontend:
+    container_name: tarot_frontend
+    build:
+      context: frontend
+    image: tarot_frontend:latest
+    command: npm run build
+    volumes:
+      - ./frontend/public/:/frontend/public/
+      - ./frontend/src/:/frontend/src/
