@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from tarot.auth import validate
+from tarot.auth import parse_user_data, validate
 from tarot.services.tarot_utils import (get_tarot_id, save_prediction,
                                         check_user_prediction, get_predn)
 from django.core.exceptions import ValidationError
@@ -19,7 +19,8 @@ def get_predicton(request):
     try:
         data_auth = request.META.get('Authorization')
         secret = env('TG_TOKEN')
-        data = validate(data_auth, secret)
+        validate(data_auth, secret)
+        data = parse_user_data(data_auth)
         number = get_tarot_id()
         predn = get_predn(number, data)
         context = check_user_prediction(data['user_id'], data['prediction'])
