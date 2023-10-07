@@ -1,0 +1,23 @@
+.card > .front, .card > .back{
+    overflow: hidden;
+    backface-visibility: hidden;
+    position: absolute;
+    transition: transform .6s linear;
+}
+
+.card > .front {
+    background: whitesmoke;
+    transform: perspective(600px) rotateY(0deg);
+}
+.card > .back{
+    background: skyblue;
+     transform: perspective(600px) rotateY(-180deg); 
+}
+
+.card.rotated > .front{
+    transform: perspective(600px) rotateY(180deg);
+}
+
+.card.rotated > .back{ 
+    transform: perspective(600px) rotateY(0deg);
+}
