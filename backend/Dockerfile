@@ -8,6 +8,7 @@ COPY requirements.txt /tarot
 
 RUN pip install --no-cache-dir -r requirements.txt
 RUN SECRET_KEY=NOT_IMPORTANT_VALUE python manage.py collectstatic --no-input
+RUN SECRET_KEY=NOT_IMPORTANT_VALUE python manage.py to_db --no-input
 EXPOSE 80
 COPY backend/ /tarot
 
