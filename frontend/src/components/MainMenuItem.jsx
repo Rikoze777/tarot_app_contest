@@ -41,7 +41,7 @@ function getStateByType(type) {
 
 function MainMenuItem(props) {
   let state = getStateByType(props.type)
-  let imageUrl = process.env.PUBLIC_URL + '/img/' + state.image
+  let imageUrl = 'img/' + state.image
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
     let path = `/poll`; 
