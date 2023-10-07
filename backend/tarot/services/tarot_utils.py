@@ -1,22 +1,17 @@
 from datetime import timedelta
 import random
 from django.utils import timezone
-from backend.tarot.models import Card, Prediction
+from tarot.models import Card, Prediction
 
 
 def get_tarot_id():
-    tarot_numbers = list(range(1, 79))
-    random.shuffle(tarot_numbers)
-    choosen_number = random.choice[tarot_numbers]
-
-    return choosen_number
+    return random.randint(1, 78)
 
 
-def get_predn(number, data):
+def get_predn(number, prediction_type):
     card_queryset = Card.objects.get(id=number)
     card = card_queryset.card
     image = card_queryset.image.url
-    prediction_type = data['prediction']
     if prediction_type == 'yes_or_no':
         prediction = card_queryset.yes_or_no
     elif prediction_type == 'advise':

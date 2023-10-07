@@ -1,32 +1,24 @@
-import json
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_http_methods
-from tarot.auth import parse_user_data, validate
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.response import Response
+from tarot.serializers import UserSerializer
+from tarot.auth import TelegramAuthentication
+
 from tarot.services.tarot_utils import (get_tarot_id, save_prediction,
                                         check_user_prediction, get_predn)
-from django.core.exceptions import ValidationError
-from environs import Env
-
-env = Env()
-env.read_env()
 
 
-@csrf_exempt
-@require_http_methods(['GET'])
-def get_predicton(request):
-    try:
-        data_auth = request.META.get('Authorization')
-        secret = env('TG_TOKEN')
-        validate(data_auth, secret)
-        data = parse_user_data(data_auth)
-        number = get_tarot_id()
-        predn = get_predn(number, data)
-        context = check_user_prediction(data['user_id'], data['prediction'])
-        context['prediction_disc'] = predn['prediction']
-        return JsonResponse(data=context, status=200)
-    except ValidationError as err:
-        return JsonResponse({'message': str(err)}, status=400)
-    except Exception as err:
-        return JsonResponse({'message': 'An error occurred'}, status=500)
+@api_view(['GET'])
+@authentication_classes([TelegramAuthentication])
+def get_predicton(request, format=None):
+    prediction_type = request.query_params.get('type')
+    number = get_tarot_id()
+    predn = get_predn(number, prediction_type)
+    context = check_user_prediction(request.user.tg_id, prediction_type)
+    context['prediction_disc'] = predn['prediction']
+    return Response(context)
+    
+@api_view(['GET'])
+@authentication_classes([TelegramAuthentication])
+def get_user(request, format=None):
+    user_data = UserSerializer(request.user).data
+    return Response(user_data)
