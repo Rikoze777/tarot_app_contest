@@ -19,4 +19,4 @@ def delete_user(user_id):
 
 
 def get_user_sub(user_id):
-    return Subscription.objects.get(user__tg_id=user_id).role
+    return Subscription.objects.get(user__tg_id=user_id)

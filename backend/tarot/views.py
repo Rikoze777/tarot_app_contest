@@ -12,19 +12,18 @@ from tarot.services.tarot_utils import (get_tarot_id,
 @authentication_classes([TelegramAuthentication])
 def get_predicton(request, format=None):
     prediction_type = request.query_params.get('type')
-    number = get_tarot_id()
     context = check_user_prediction(request.user.tg_id,
-                                    prediction_type, number)
+                                    prediction_type)
     return Response(context)
 
 
 @api_view(['GET'])
 @authentication_classes([TelegramAuthentication])
 def get_user(request, format=None):
-    user_data = UserSerializer(request.user).data
-    sub = get_user_sub(user_data)
+    user_id = request.user.tg_id
+    sub = get_user_sub(user_id)
     context = {
-        'tg_id': user_data,
-        'sub': sub
+        'tg_id': user_id,
+        'level': sub.role
     }
     return Response(context)

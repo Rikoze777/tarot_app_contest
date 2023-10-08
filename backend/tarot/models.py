@@ -32,6 +32,19 @@ class Card(models.Model):
 
     def __str__(self):
         return f'{self.card}'
+    
+    def getDescription(card, prediction_type: str):
+        if prediction_type == 'yes_or_no':
+            return card.yes_or_no
+        elif prediction_type == 'advise':
+            return card.advise
+        elif prediction_type == 'day':
+            return card.day
+        elif prediction_type == 'love':
+            return card.love
+        elif prediction_type == 'finance':
+            return card.finance
+        return card.day
 
 
 class Prediction(models.Model):

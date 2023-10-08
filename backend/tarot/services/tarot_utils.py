@@ -13,6 +13,7 @@ def get_predn(number, prediction_type):
     card_queryset = Card.objects.get(id=number)
     card = card_queryset.card
     image = card_queryset.image.url
+    prediction = card_queryset.day
     if prediction_type == 'yes_or_no':
         prediction = card_queryset.yes_or_no
     elif prediction_type == 'advise':
@@ -41,40 +42,34 @@ def get_predn(number, prediction_type):
     # prediction.save()
 
 
-def check_user_prediction(user_id, prediction_type, number):
+def check_user_prediction(user_id, prediction_type):
     end_date = timezone.now()
     start_date = end_date - timedelta(days=1)
     user = User.objects.get(tg_id=user_id)
-    predn = get_predn(number, prediction_type)
+    # predn = get_predn(number, prediction_type)
     try:
         checked = Prediction.objects.get(user__tg_id=user_id,
                                          prediction=prediction_type,
                                          date__gte=start_date)
-        if prediction_type == 'yes_or_no':
-            prediction = checked.card.yes_or_no
-        elif prediction_type == 'advise':
-            prediction = checked.card.advise
-        elif prediction_type == 'day':
-            prediction = checked.card.day
-        elif prediction_type == 'love':
-            prediction = checked.card.love
-        elif prediction_type == 'finance':
-            prediction = checked.card.finance
         context = {
             'user': checked.user.tg_id,
-            'prediction': prediction,
+            'prediction': checked.card.getDescription(prediction_type),
+            'image': checked.card.image.url,
             'prediction_type': prediction_type
         }
         # dumpded = json.dumps(context)
         return context
     except Prediction.DoesNotExist:
+        number = get_tarot_id()
+        card = Card.objects.get(id=number)
         created = Prediction.objects.create(user=user,
                                             prediction=prediction_type,
+                                            card=card,
                                             date=end_date)
         context = {
             'user': created.user.tg_id,
-            'prediction': predn['prediction'],
-            'image': predn['image'],
+            'prediction': card.getDescription(prediction_type),
+            'image': card.image.url,
             'prediction_type': prediction_type
         }
         # dumpded = json.dumps(context)
