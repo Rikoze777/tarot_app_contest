@@ -18,13 +18,12 @@ class User(models.Model):
 
 
 class Card(models.Model):
-    card = models.CharField("Card", max_length=40, db_index=True,)
+    card = models.CharField("Card", max_length=20, db_index=True,)
     image = models.ImageField('Image', null=True, blank=True,)
     finance = models.TextField('finance description')
     love = models.TextField('love description')
     day = models.TextField('day description')
     advise = models.TextField('advise description')
-    triple = models.TextField('triple description')
     yes_or_no = models.TextField('yes or no description')
 
     class Meta:
@@ -42,27 +41,20 @@ class Prediction(models.Model):
     card = models.ManyToManyField(Card,
                                   related_name='predictions',)
     date = models.DateTimeField('Date')
-    finance_flag = models.PositiveIntegerField('finance_flag')
-    love_flag = models.PositiveIntegerField('love_flag')
-    day_flag = models.PositiveIntegerField('day_flag')
-    advise_flag = models.PositiveIntegerField('advise_flag')
-    triple_flag = models.PositiveIntegerField('triple_flag')
-    yes_or_no_flag = models.PositiveIntegerField('yes_or_no_flag')
+    prediction = models.CharField("Prediction", max_length=15, db_index=True,)
 
     class Meta:
         verbose_name = 'Prediction'
         verbose_name_plural = 'Predictions'
 
     def __str__(self):
-        return f'{self.user.tg_id}-{self.user.name}'
+        return f'{self.user.tg_id}'
 
 
 class Subscription(models.Model):
     class UserRole(models.TextChoices):
         USER = "U", "User"
         LEVEL1 = "L1", "Magic user"
-        LEVEL2 = "L2", "Fairy user"
-        LEVEL3 = "L3", "Almighty user"
 
     role = models.CharField(
         'Subscription level',
