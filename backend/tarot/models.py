@@ -18,7 +18,7 @@ class User(models.Model):
 
 
 class Card(models.Model):
-    card = models.CharField("Card", max_length=20, db_index=True,)
+    card = models.CharField("Card", max_length=20, db_index=True)
     image = models.ImageField('Image', null=True, blank=True,)
     finance = models.TextField('finance description')
     love = models.TextField('love description')
@@ -38,8 +38,9 @@ class Prediction(models.Model):
     user = models.ForeignKey(User,
                              related_name='predictions',
                              on_delete=models.CASCADE)
-    card = models.ManyToManyField(Card,
-                                  related_name='predictions',)
+    card = models.ForeignKey(Card,
+                                  related_name='predictions',
+                                  on_delete=models.CASCADE)
     date = models.DateTimeField('Date')
     prediction = models.CharField("Prediction", max_length=15, db_index=True,)
 

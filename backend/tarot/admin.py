@@ -27,7 +27,9 @@ class UserAdmin(admin.ModelAdmin):
 class CardAdmin(admin.ModelAdmin):
     search_fields = [
         'card',
+        'image',
     ]
     list_display = [
         'card',
+        'image',
     ]
