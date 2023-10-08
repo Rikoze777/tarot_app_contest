@@ -26,7 +26,7 @@ function WebAppLoader({ children }) {
     return <div>Warming up SDK.</div>;
   }
 
-  print(components.initDataRaw)
+  console.log(components.initDataRaw);
 
   // Safely render application.
   return <>{children}</>;
