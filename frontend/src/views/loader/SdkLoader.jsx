@@ -1,10 +1,11 @@
 import { useSDK } from '@twa.js/sdk-react';
+import Loader from '../../components/Loader';
 /**
  * This component is the layer controlling the application display. It displays
  * application in case, the SDK is initialized, displays an error if something
  * went wrong, and a loader if the SDK is warming up.
  */
-function WebAppLoader({ children }) {
+function SdkLoader({ children }) {
   const { didInit, components, error } = useSDK();
 
   // There were no calls of SDK's init function. It means, we did not
@@ -23,7 +24,9 @@ function WebAppLoader({ children }) {
   // several milliseconds or something like that, but we should
   // have this check.
   if (components === null) {
-    return <div>Warming up SDK.</div>;
+    return (
+      <Loader />
+    )
   }
 
   console.log(components.initDataRaw);
@@ -32,4 +35,4 @@ function WebAppLoader({ children }) {
   return <>{children}</>;
 }
 
-export default WebAppLoader;
+export default SdkLoader;
