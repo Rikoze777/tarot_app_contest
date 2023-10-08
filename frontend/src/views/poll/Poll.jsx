@@ -1,26 +1,58 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import TarotCard from "../../components/TarotCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getPredictionInfo } from "../../utils/predictions";
+import { useEffect, useState } from "react";
+import { useStore } from "../../utils/reactive";
+import { apiPredictionUrl, getConfig } from "../../utils/api";
+import axios from "axios";
+import Loader from "../../components/Loader";
 
 function Poll() {
+  let { type } = useParams();
   let navigate = useNavigate(); 
+  const [prediction, setPrediction] = useStore(type+"_prediction");
+  const [isLoading, setIsLoading] = useState(prediction == null)
+
+  useEffect(() => {
+    if (prediction == null) {
+      let fullUrl = apiPredictionUrl+"?type="+type
+      axios.get(fullUrl, getConfig()).then((resp) => {
+        let prediction = resp.data
+        console.log(prediction)
+        setPrediction(prediction)
+      }).finally(setIsLoading(false));
+    }
+  }, []);
+
+  let state = getPredictionInfo(type)
   const routeChange = () =>{ 
     navigate(-1);
   }
-  return (
-    <div className="p-4 bg-indigo-50 absolute min-h-full">
-      <div className="p-4 shadow-xl bg-white rounded-2xl">
-        <div className="flex items-center">
-          <h2 className="ml-12 text-2xl text-center font-bold flex-auto">Your daily advice</h2>
-          <XMarkIcon className="w-12 h-12 p-2 bg-indigo-50 rounded-full" onClick={routeChange}/>
+
+  if (isLoading) {
+    return(<Loader />)
+  }
+
+  if (prediction) {
+    return (
+      <div className="p-4 bg-indigo-50 absolute min-h-full">
+        <div className="p-4 shadow-xl bg-white rounded-2xl">
+          <div className="flex items-center">
+            <h2 className="ml-12 text-2xl text-center font-bold flex-auto">{state.title}</h2>
+            <XMarkIcon className="w-12 h-12 p-2 bg-indigo-50 rounded-full" onClick={routeChange}/>
+          </div>
+          <TarotCard image={prediction.image} />
+          <p className="text-l mt-12 first-letter:font-bold first-letter:text-xl font-serif">
+            {prediction.prediction}
+          </p>
         </div>
-        <TarotCard />
-        <p className="text-l mt-12 first-letter:font-bold first-letter:text-xl font-serif">
-          Если в раскладе появился Маг, значит, настало время для того, чтобы начат двигаться в выбранном направлении. Ситуация полностью вами контролируется, нужно только взять инициативу в свои руки. Все получится — вы сами это знаете.Действовать необходимо прямо сейчас, не мешкая.Иногда карта символизирует появление на работе сильного конкурента, который может помешать вашей карьере или занять ту должность, на которую метили вы. Он будет идти по головам и плести интриги, чтобы заполучить желаемое.Другие значения карты Маг в работе и карьере:начало нового жизненного пути,новый проект,поиск новых решений,внезапное озарение,талант и профессионализм.В раскладе за картой также может крыться человек, которому часто приходится выступать перед публикой. Это первоклассный специалист, мастер своего дела — ученый, преподаватель, писатель, коуч, медик.Перевернутая «Маг» в работе и финансах: значениеКогда карта выпадает в перевернутом положении, она указывает на то, что талант не был должным образом реализован. Человек не может проявить себя, его реальный потенциал не используется. Возможно, причина в отсутствии опыта или в недостаточном целеполагании.Человек не делает все, что в его силах, чтобы построить карьеру или наладить бизнес. Его потенциал намного больше, но его реализации что-то мешает. В этой ситуации попытки улучшить положение дел с работой ни к чему не приведут.xa0Иногда карта указывает на карьериста, для которого работа стоит на первом месте, вытесняя семью, родных и друзей. Он готов пойти по головам, лишь бы достичь верхней ступеньки в карьерной лестнице.Неприятная личность, затесавшаяся в коллектив, пытается получить свое при помощи обмана, хитрости. Если вас пытаются вовлечь в новый проект или прибыльное дело, перевернутый Маг говорит о том, что стоит еще раз все хорошенько взвесить — велик риск, что все пойдет не так, как задумывалось или как вам обещали.Совет карты «Маг» в работе и финансахВ финансовых и деловых вопросах не нужно предпринимать никаких действий, чтобы двигаться вперед. Все идет как по маслу, можно расслабиться и наслаждаться результатами приложенных ранее усилий.Если появится возможность публично продемонстрировать свои навыки и умения, не пренебрегайте ею. Это будет способствовать вашей карьере.', 'Смотрите также:Маг в отношениях и любвиМаг - мысли и чувстваМаг - действия и намеренияМаг вопрос Да-НетМаг о здоровьеМаг - прошлое, настоящее, будущееМаг на день - карта дняСовет карты МагМаг - сочетание с дугими арканами', 'Сейчас звезды вам советуют воспользоваться одним из предложенных ниже раскладов. Не упустите свой шанс узнать правду.', 'На работу и бизнесПростой расклад на работу или бизнес на рунах.смотреть', 'Гадание на домино «На работу и бизнес»Бизнес расклад на домино на работу и финансовое состояние
-        </p>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return(<div>Something went wrong...</div>)
+  }
+  
 }
 
 export default Poll;

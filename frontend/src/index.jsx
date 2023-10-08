@@ -4,16 +4,16 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { SDKProvider } from '@twa.js/sdk-react';
 import App from './App';
-import WebAppLoader from './components/WebAppLoader';
+import SdkLoader from './views/loader/SdkLoader';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <SDKProvider>
-      <WebAppLoader>
+      <SdkLoader>
         <App />
-      </WebAppLoader>
+      </SdkLoader>
     </SDKProvider>
   </React.StrictMode>
 );
