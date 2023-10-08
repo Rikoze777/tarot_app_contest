@@ -1,5 +1,6 @@
 import { useSDK } from '@twa.js/sdk-react';
 import Loader from '../../components/Loader';
+import { setStore } from '../../utils/reactive';
 /**
  * This component is the layer controlling the application display. It displays
  * application in case, the SDK is initialized, displays an error if something
@@ -29,6 +30,8 @@ function SdkLoader({ children }) {
     )
   }
 
+  setStore("user", components.initData.user);
+  setStore("init_data", components.initDataRaw);
   console.log(components.initDataRaw);
 
   // Safely render application.

@@ -53,7 +53,7 @@ export default function App() {
       <Routes>
         <Route element={<AnimationLayout />}>
           <Route path="/menu" element={<MainMenu />} />
-          <Route path="/poll" element={<Poll />} />
+          <Route path="/poll/:type" element={<Poll />} />
           <Route path="*" element={<Navigate to="/menu" replace />} />
         </Route>
       </Routes>
