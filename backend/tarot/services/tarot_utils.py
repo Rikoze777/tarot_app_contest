@@ -1,7 +1,8 @@
 from datetime import timedelta
+import json
 import random
 from django.utils import timezone
-from tarot.models import Card, Prediction
+from tarot.models import Card, Prediction, User
 
 
 def get_tarot_id():
@@ -30,39 +31,51 @@ def get_predn(number, prediction_type):
     return context
 
 
-def save_prediction(user_id, prediction):
-    # prediction_list = ['day', 'love', 'yes_or_no', 'finance', 'advise']
-    prediction = Prediction(
-        user=user_id,
-        date=timezone.now(),
-        prediction=prediction,
-    )
-    prediction.save()
+# def save_prediction(user_id, prediction):
+    # # prediction_list = ['day', 'love', 'yes_or_no', 'finance', 'advise']
+    # prediction = Prediction(
+    #     user=user_id,
+    #     date=timezone.now(),
+    #     prediction=prediction,
+    # )
+    # prediction.save()
 
 
-def check_user_prediction(user_id, prediction):
+def check_user_prediction(user_id, prediction_type, number):
     end_date = timezone.now()
-    start_date = end_date - timedelta(hours=24)
+    start_date = end_date - timedelta(days=1)
+    user = User.objects.get(tg_id=user_id)
+    predn = get_predn(number, prediction_type)
     try:
-        checked = Prediction.objects.get(user=user_id,
-                                         prediction=prediction,
+        checked = Prediction.objects.get(user__tg_id=user_id,
+                                         prediction=prediction_type,
                                          date__gte=start_date)
+        if prediction_type == 'yes_or_no':
+            prediction = checked.card.yes_or_no
+        elif prediction_type == 'advise':
+            prediction = checked.card.advise
+        elif prediction_type == 'day':
+            prediction = checked.card.day
+        elif prediction_type == 'love':
+            prediction = checked.card.love
+        elif prediction_type == 'finance':
+            prediction = checked.card.finance
         context = {
-            'user': checked.user,
-            'date': checked.date,
-            'prediction': checked.prediction
+            'user': checked.user.tg_id,
+            'prediction': prediction,
+            'prediction_type': prediction_type
         }
+        # dumpded = json.dumps(context)
         return context
     except Prediction.DoesNotExist:
-        pred = Prediction(
-            user=user_id,
-            date=timezone.now(),
-            prediction=prediction,
-        )
-        pred.save()
+        created = Prediction.objects.create(user=user,
+                                            prediction=prediction_type,
+                                            date=end_date)
         context = {
-            'user': pred.user,
-            'date': pred.date,
-            'prediction': pred.prediction
+            'user': created.user.tg_id,
+            'prediction': predn['prediction'],
+            'image': predn['image'],
+            'prediction_type': prediction_type
         }
+        # dumpded = json.dumps(context)
         return context
