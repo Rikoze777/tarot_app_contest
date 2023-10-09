@@ -1,12 +1,13 @@
+from telegram import Invoice
 from tarot.models import User, Subscription
 
 
 def is_new_user(user_id):
-    return not User.objects.filter(tg_id=user_id).exists()
+    return not User.objects.filter(tg_id=str(user_id)).exists()
 
 
-def save_user_data(data):
-    User.objects.create(tg_id=data["user_id"])
+def save_user_data(user_id):
+    User.objects.create(tg_id=str(user_id))
 
 
 def validate_fullname(fullname):
@@ -20,3 +21,8 @@ def delete_user(user_id):
 
 def get_user_sub(user_id):
     return Subscription.objects.get(user__tg_id=user_id)
+
+
+def get_uuid(user_id):
+    payload, created = Invoice.objects.get_or_create(user__tg_id=user_id)
+    return payload

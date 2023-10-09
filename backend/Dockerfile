@@ -13,3 +13,4 @@ EXPOSE 80
 COPY backend/ /tarot
 
 CMD ["python", "-m", "gunicorn", "-b", "127.0.0.1:8080", "zodiac.wsgi:application"]
+CMD ["python", "manage.py", "bot"]

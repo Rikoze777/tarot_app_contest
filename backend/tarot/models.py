@@ -1,3 +1,4 @@
+from uuid import uuid4
 from django.db import models
 
 
@@ -30,7 +31,7 @@ class Card(models.Model):
         verbose_name = 'Card'
         verbose_name_plural = 'Cards'
 
-    def __str__(self):
+    def str(self):
         return f'{self.card}'
     
     def getDescription(card, prediction_type: str):
@@ -90,3 +91,17 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f"{self.user.tg_id}"
+
+
+class Invoice(models.Model):
+    user = models.ForeignKey(User,
+                             related_name='Invoices',
+                             on_delete=models.CASCADE)
+    uuid = models.UUIDField(primary_key=True, default=uuid4, editable=False, unique=True)
+
+    class Meta:
+        verbose_name = 'Invoice'
+        verbose_name_plural = 'Invoices'
+
+    def __str__(self):
+        return f"{self.user.tg_id} {self.uuid}"

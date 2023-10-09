@@ -1,11 +1,12 @@
+import requests
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.response import Response
-from tarot.services.user_utils import get_user_sub
+from telegram import LabeledPrice
+from tarot.services.user_utils import get_user_sub, get_uuid
 from tarot.serializers import UserSerializer
 from tarot.auth import TelegramAuthentication
-
-from tarot.services.tarot_utils import (get_tarot_id,
-                                        check_user_prediction)
+from tarot.services.tarot_utils import check_user_prediction
+from django.conf import settings
 
 
 @api_view(['GET'])
@@ -27,6 +28,7 @@ def get_user(request, format=None):
         'level': sub.role
     }
     return Response(context)
+
 
 @api_view(['POST'])
 @authentication_classes([TelegramAuthentication])
