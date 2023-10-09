@@ -27,3 +27,9 @@ def get_user(request, format=None):
         'level': sub.role
     }
     return Response(context)
+
+@api_view(['POST'])
+@authentication_classes([TelegramAuthentication])
+def send_invoice(request, format=None):
+    
+    return Response()
