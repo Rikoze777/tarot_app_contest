@@ -1,5 +1,4 @@
-from telegram import Invoice
-from tarot.models import User, Subscription
+from tarot.models import Invoice, User, Subscription
 
 
 def is_new_user(user_id):
@@ -23,6 +22,6 @@ def get_user_sub(user_id):
     return Subscription.objects.get(user__tg_id=user_id)
 
 
-def get_uuid(user_id):
-    payload, created = Invoice.objects.get_or_create(user__tg_id=user_id)
+def get_invoice(user):
+    payload, created = Invoice.objects.get_or_create(user=user)
     return payload

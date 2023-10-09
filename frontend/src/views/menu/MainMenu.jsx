@@ -24,11 +24,17 @@ function MainMenu() {
   const requestInvoice = () => {
     setIsLoading(true);
     axios.post(apiInvoiceUrl, null, getConfig()).then((resp) => {
-      console.log(resp.data);
-      webApp.close();
+      let invoice_link = resp.data.invoice_link
+      console.log(invoice_link);
+      webApp.openInvoice(invoice_link)
+        .then(setIsLoading(false))
+        .catch((reason) => {
+          console.log(reason);
+          setIsLoading(false);
+        })
     }).catch(() => {
       setIsLoading(false);
-    });
+    }).finally(setShowModal(false));
   }
 
   if (isLoading) {
