@@ -1,23 +1,35 @@
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import MainMenuItem from "../../components/MainMenuItem";
-import { apiUserUrl, getConfig } from "../../utils/api";
+import { apiInvoiceUrl, apiUserUrl, getConfig } from "../../utils/api";
 import { useStore } from "../../utils/reactive";
 import axios from "axios";
+import { useWebApp } from "@twa.js/sdk-react";
 
 function MainMenu() {
   const [apiUser, setApiUser] = useStore('api_user');
   const [isLoading, setIsLoading] = useState(apiUser == null)
   const [showModal, setShowModal] = useStore('show_subscription');
+  const webApp = useWebApp();
 
   useEffect(() => {
     if (apiUser == null) {
       axios.get(apiUserUrl, getConfig()).then((resp) => {
-        console.log(resp.data)
-        setApiUser(resp.data)
+        console.log(resp.data);
+        setApiUser(resp.data);
       }).finally(setIsLoading(false));
     }
   }, []);
+
+  const requestInvoice = () => {
+    setIsLoading(true);
+    axios.post(apiInvoiceUrl, null, getConfig()).then((resp) => {
+      console.log(resp.data);
+      webApp.close();
+    }).catch(() => {
+      setIsLoading(false);
+    });
+  }
 
   if (isLoading) {
     return (<Loader />)
@@ -77,7 +89,7 @@ function MainMenu() {
                     <button
                       className="bg-indigo-500 text-white active:bg-indigo-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
-                      onClick={() => setShowModal(false)}
+                      onClick={requestInvoice}
                     >
                       Apply
                     </button>
