@@ -4,20 +4,32 @@ services:
     container_name: tarot_web
     build:
       context: backend
-    command: python -m gunicorn -b 0.0.0.0:8080 --reload zodiac.wsgi:application
+    command:  sh -c "cd backend/ && python -m gunicorn -b 0.0.0.0:8080 --reload zodiac.wsgi:application"
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - ./backend/.env
     volumes:
       - .:/tarot
-  
+
+  bot:
+    build:
+      context: bot
+      dockerfile: Dockerfile.bot
+    container_name: bot
+    restart: always
+    command: sh -c "cd backend/bot && python3 bot.py"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./bot:/bot
+
   frontend:
     container_name: tarot_frontend
     build:
       context: frontend
     image: tarot_frontend:latest
-    command: npm run build
+    command: sh -c "cd /frontend/ && npm run build"
     volumes:
       - ./frontend/public/:/frontend/public/
       - ./frontend/src/:/frontend/src/
