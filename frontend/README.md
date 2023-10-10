@@ -1,6 +1,22 @@
-# Getting Started with Create React App
+# Getting Started
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Prerequirements
+Node.js 18+
+
+## First Step
+In order to run successfully you should add into .env file parameter `VITE_API_BASE_URL=http..` with value of your backend URL
+
+## Second Step
+Follow frontend subfolder and install all dependendies
+```bash
+cd frontend/ && npm install
+```
+
+## Run dev or build to production
+`npm run dev` to start local serve on port 3000 (in this case you should point your proxy to this port)
+`npm run build` to build frontend into `dist` folder (in this case you should distribute frontend as static files)
 
 ## Available Scripts
 
