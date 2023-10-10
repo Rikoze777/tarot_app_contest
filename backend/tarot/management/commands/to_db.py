@@ -9,7 +9,7 @@ class Command(BaseCommand):
     help = 'JSON to db'
 
     def handle(self, *args, **options):
-        with open('../tarot_db_en.json', 'r') as tarot_file:
+        with open('./tarot_db_en.json', 'r') as tarot_file:
             tarot_cards = json.load(tarot_file)
 
         for card, data in tarot_cards.items():
@@ -23,7 +23,7 @@ class Command(BaseCommand):
             )
 
             card_to_db.save()
-            with open(f'../cards/{card}.png', "rb") as img:
+            with open(f'./cards/{card}.png', "rb") as img:
                 djangofile = File(img)
                 card_to_db.image.save('{card}.png', djangofile)
 

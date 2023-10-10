@@ -1,8 +1,7 @@
-FROM node:12.22-buster-slim
+FROM node:18.18-alpine3.17
 
 WORKDIR /frontend
 
-COPY frontend/ /frontend
+COPY . /frontend
 RUN npm install
-RUN npm run build
-CMD ["npm", "start"]
+CMD ["npm", "run", "build"]

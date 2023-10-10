@@ -1,6 +1,7 @@
 # Deployment with Docker
 
-- Make sure that .env and requirements.txt are present in the project root, then run the command
+- Docker and docker-compose must be installed.
+- Make sure that `.env` and `requirements.txt` are present in the `backend` folder, then run the command
 ```bash
 docker-compose up --build
 ```

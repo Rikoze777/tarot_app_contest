@@ -67,23 +67,11 @@ class Prediction(models.Model):
 
 
 class Subscription(models.Model):
-    class UserRole(models.TextChoices):
-        USER = "U", "User"
-        LEVEL1 = "L1", "Magic user"
-
-    role = models.CharField(
-        'Subscription level',
-        max_length=50,
-        choices=UserRole.choices,
-        default=UserRole.USER,
-    )
-    user = models.OneToOneField(User,
+    user = models.ForeignKey(User,
                                 related_name='subscriptions',
                                 on_delete=models.CASCADE)
-    is_subscribed = models.BooleanField('Status', default=False)
     date_from = models.DateTimeField('Subscription start', null=True, blank=True)
     date_end = models.DateTimeField('Subscription end', null=True, blank=True)
-    price = models.PositiveIntegerField('Price', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Subscription'

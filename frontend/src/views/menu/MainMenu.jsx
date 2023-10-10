@@ -27,24 +27,24 @@ function MainMenu() {
       let invoice_link = resp.data.invoice_link
       console.log(invoice_link);
       webApp.openInvoice(invoice_link)
-        .then(setIsLoading(false))
+        .then((status) => {
+          console.log(status)
+        })
         .catch((reason) => {
           console.log(reason);
-          setIsLoading(false);
         })
-    }).catch(() => {
+    }).finally(() => {
       setIsLoading(false);
-    }).finally(setShowModal(false));
+      setShowModal(false);
+    })
   }
 
   if (isLoading) {
     return (<Loader />)
   } else {
-    let userSubscribed
+    let userSubscribed = false
     if (apiUser) {
-      userSubscribed = apiUser.level == "L1"
-    } else {
-      userSubscribed = false
+      userSubscribed = apiUser.subscribed
     }
     return (
       <div className="p-8 bg-slate-50 absolute min-h-full min-w-full">
