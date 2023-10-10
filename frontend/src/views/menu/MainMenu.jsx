@@ -4,13 +4,14 @@ import MainMenuItem from "../../components/MainMenuItem";
 import { apiInvoiceUrl, apiUserUrl, getConfig } from "../../utils/api";
 import { useStore } from "../../utils/reactive";
 import axios from "axios";
-import { useWebApp } from "@twa.js/sdk-react";
+import { useThemeParams, useWebApp } from "@twa.js/sdk-react";
 
 function MainMenu() {
   const [apiUser, setApiUser] = useStore('api_user');
   const [isLoading, setIsLoading] = useState(apiUser == null)
   const [showModal, setShowModal] = useStore('show_subscription');
   const webApp = useWebApp();
+  const themeParams = useThemeParams();
 
   useEffect(() => {
     if (apiUser == null) {
@@ -47,7 +48,7 @@ function MainMenu() {
       userSubscribed = apiUser.subscribed
     }
     return (
-      <div className="p-8 bg-slate-50 absolute min-h-full min-w-full">
+      <div className="p-8 absolute min-h-full min-w-full" style={{backgroundColor: themeParams.secondaryBackgroundColor}}>
         <div className="container">
           <MainMenuItem type='daily' isUnlocked={true} />
           <MainMenuItem type='love' isUnlocked={userSubscribed} />
@@ -62,24 +63,25 @@ function MainMenu() {
             >
               <div className="relative w-auto my-6 mx-auto max-w-3xl">
                 {/*content*/}
-                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full outline-none focus:outline-none" style={{backgroundColor: themeParams.backgroundColor}}>
                   {/*header*/}
                   <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                     <h3 className="text-3xl font-semibold">
                       Oops! Not enough subscription level.
                     </h3>
                     <button
-                      className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                      className="p-1 ml-auto bg-transparent border-0 opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                       onClick={() => setShowModal(false)}
+                      style={{color: themeParams.textColor}}
                     >
-                      <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none" style={{color: themeParams.textColor}}>
                         ×
                       </span>
                     </button>
                   </div>
                   {/*body*/}
                   <div className="relative p-6 flex-auto">
-                    <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
+                    <p className="my-4 text-gray-500 text-lg leading-relaxed">
                       This section is under Premium level. Want to subscribe now?
                     </p>
                   </div>

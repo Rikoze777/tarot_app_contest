@@ -7,10 +7,12 @@ import { useStore } from "../../utils/reactive";
 import { apiPredictionUrl, getConfig } from "../../utils/api";
 import axios from "axios";
 import Loader from "../../components/Loader";
+import { useThemeParams } from "@twa.js/sdk-react";
 
 function Poll() {
   let { type } = useParams();
   let navigate = useNavigate(); 
+  const themeParams = useThemeParams();
   const [prediction, setPrediction] = useStore(type+"_prediction");
   const [isLoading, setIsLoading] = useState(prediction == null)
 
@@ -36,14 +38,14 @@ function Poll() {
 
   if (prediction) {
     return (
-      <div className="p-4 bg-indigo-50 absolute min-h-full">
-        <div className="p-4 shadow-xl bg-white rounded-2xl">
+      <div className="p-4 absolute min-h-full" style={{backgroundColor: themeParams.secondaryBackgroundColor}}>
+        <div className="p-4 shadow-xl rounded-2xl" style={{backgroundColor: themeParams.backgroundColor}}>
           <div className="flex items-center">
-            <h2 className="ml-12 text-2xl text-center font-bold flex-auto">{state.title}</h2>
-            <XMarkIcon className="w-12 h-12 p-2 bg-indigo-50 rounded-full" onClick={routeChange}/>
+            <h2 className="ml-12 text-2xl text-center font-bold flex-auto" style={{color: themeParams.textColor}}>{state.title}</h2>
+            <XMarkIcon className="w-12 h-12 p-2 rounded-full" onClick={routeChange} style={{backgroundColor: themeParams.secondaryBackgroundColor}}/>
           </div>
           <TarotCard image={prediction.image} />
-          <p className="text-l mt-12 first-letter:font-bold first-letter:text-xl font-serif">
+          <p className="text-l mt-12 first-letter:font-bold first-letter:text-xl font-serif" style={{color: themeParams.textColor}}>
             {prediction.prediction}
           </p>
         </div>
