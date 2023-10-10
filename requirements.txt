@@ -1,4 +1,0 @@
-django==3.2
-environs==9.5.0
-python-telegram-bot==13.13
-Pillow==10.0.0

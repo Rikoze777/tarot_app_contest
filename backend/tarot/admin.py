@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from tarot.models import User, Subscription, Card, Prediction
+from tarot.models import User, Subscription, Card, Prediction, Invoice
 
 
 class SubInline(admin.TabularInline):
@@ -27,7 +27,21 @@ class UserAdmin(admin.ModelAdmin):
 class CardAdmin(admin.ModelAdmin):
     search_fields = [
         'card',
+        'image',
     ]
     list_display = [
         'card',
+        'image',
+    ]
+
+
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    search_fields = [
+        'user',
+        'uuid',
+    ]
+    list_display = [
+        'user',
+        'uuid',
     ]
