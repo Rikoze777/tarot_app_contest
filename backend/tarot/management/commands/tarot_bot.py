@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 async def start_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Displays info on how to use the bot."""
+    """Displays greeting."""
     user_id = update.effective_user.id
     if is_new_user(user_id):
         save_user_data(user_id)
@@ -25,7 +25,20 @@ async def start_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     msg = (
         f"Hello, {username}. Welcome to Tarot Bot. You can get daily predictions or advices on any questions."
         "All interactive functionality available through the 'Menu' button."
-        "Use /subscribe to subscribe for a month and unlock Love, Finance, Question, Yes or No menu options."
+        "Use /subscribe to subscribe for a month and unlock Love, Finance, Question, Yes or No menu options.\n"
+        "Or /help to get more information."
+    )
+
+    await update.message.reply_text(msg)
+    
+
+async def help_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Displays info on how to use the bot."""
+    msg = (
+        "Here following commands:"
+        "/subscription - get info about your subscription.\n"
+        "/subscribe to subscribe for a month and unlock Love, Finance, Question, Yes or No menu options.\n"
+        "/help to receive commands information"
     )
 
     await update.message.reply_text(msg)
@@ -95,13 +108,12 @@ class Command(BaseCommand):
         # Create the Application and pass it your bot's token.
         application = Application.builder().token(settings.BOT_API_TOKEN).build()
 
-        # simple start function
         application.add_handler(CommandHandler("start", start_callback))
+        
+        application.add_handler(CommandHandler("help", help_callback))
 
-        # Add command handler to start the payment invoice
         application.add_handler(CommandHandler("subscribe", subscribe_callback))
 
-        # Add command handler to start the payment invoice
         application.add_handler(CommandHandler("subscription", subscription_check))
 
         # Pre-checkout handler to final check
